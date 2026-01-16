@@ -9,7 +9,7 @@ A full-stack React Native mobile application built with Expo for finding EV char
 - 📍 **Location Services** - Get user location and display on map
 - 🔍 **Search** - Search for locations and find nearby EV stations
 - ⚡ **EV Stations** - Display nearby charging stations with details
-- ❤️ **Favorites** - Save favorite stations with Firebase sync
+- ❤️ **Favorites** - Save favorite stations with Supabase sync
 - 📱 **Tab Navigation** - Home and Favorites tabs
 - 🎨 **Modern UI** - Clean and intuitive user interface
 

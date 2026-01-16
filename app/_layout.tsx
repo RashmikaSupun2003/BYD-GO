@@ -7,9 +7,10 @@ import { useEffect } from 'react';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AuthProvider, CLERK_PUBLISHABLE_KEY, useAuth } from '@/contexts/AuthContext';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ThemeProvider as CustomThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { router, useSegments } from 'expo-router';
 
@@ -17,7 +18,7 @@ import { router, useSegments } from 'expo-router';
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { user, loading, isSignedIn } = useAuth();
   const segments = useSegments();
 
@@ -51,7 +52,7 @@ function RootLayoutNav() {
   }, [user, loading, segments, isSignedIn]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="welcome" />
         <Stack.Screen name="login" />
@@ -81,12 +82,16 @@ export default function RootLayout() {
   }, [loaded, error]);
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-      <AuthProvider>
-        <FavoritesProvider>
-          <RootLayoutNav />
-        </FavoritesProvider>
-      </AuthProvider>
-    </ClerkProvider>
+    <ErrorBoundary>
+      <CustomThemeProvider>
+        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+          <AuthProvider>
+            <FavoritesProvider>
+              <RootLayoutNav />
+            </FavoritesProvider>
+          </AuthProvider>
+        </ClerkProvider>
+      </CustomThemeProvider>
+    </ErrorBoundary>
   );
 }

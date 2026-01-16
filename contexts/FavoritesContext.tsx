@@ -43,11 +43,17 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Only load favorites if user is available and has an email
-    const userEmail = getUserEmail();
-    if (user && userEmail) {
-      loadFavorites();
-    } else {
-      // If no user, clear favorites
+    try {
+      const userEmail = getUserEmail();
+      if (user && userEmail) {
+        loadFavorites();
+      } else {
+        // If no user, clear favorites
+        setFavorites([]);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error in FavoritesContext useEffect:', error);
       setFavorites([]);
       setLoading(false);
     }

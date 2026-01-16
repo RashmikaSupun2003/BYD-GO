@@ -1,33 +1,38 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { Colors } from '@/constants/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 
 interface HeaderProps {
   title?: string;
+  showThemeToggle?: boolean;
 }
 
-export default function Header({ title = 'EV Charging Stations' }: HeaderProps) {
-  const { user, logout, isSignedIn } = useAuth();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      router.replace('/welcome');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+export default function Header({ title = 'EV Charging Stations', showThemeToggle = false }: HeaderProps) {
+  const { theme, toggleTheme } = useTheme();
+  const colors = Colors[theme];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background, borderBottomColor: theme === 'dark' ? '#333' : '#e0e0e0' }]}>
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
-        {isSignedIn && user && (
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Ionicons name="log-out-outline" size={24} color="#007AFF" />
-          </TouchableOpacity>
+        <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+        {showThemeToggle && (
+          <View style={styles.themeToggleContainer}>
+            <Ionicons 
+              name={theme === 'dark' ? 'moon' : 'sunny'} 
+              size={20} 
+              color={colors.text} 
+              style={styles.themeIcon}
+            />
+            <Switch
+              value={theme === 'dark'}
+              onValueChange={toggleTheme}
+              trackColor={{ false: '#767577', true: '#007AFF' }}
+              thumbColor={theme === 'dark' ? '#fff' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+            />
+          </View>
         )}
       </View>
     </View>
@@ -56,10 +61,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1a1a1a',
   },
-  logoutButton: {
-    padding: 5,
+  themeToggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  themeIcon: {
+    marginRight: 4,
   },
 });
 

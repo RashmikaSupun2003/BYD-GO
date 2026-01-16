@@ -70,6 +70,11 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
+    "updates": {
+      "enabled": false,
+      "checkAutomatically": "NEVER",
+      "fallbackToCacheTimeout": 0
+    },
     "extra": {
       "clerkPublishableKey": "pk_test_Zml0LW1vbmFyY2gtNzEuY2xlcmsuYWNjb3VudHMuZGV2JA"
     }

@@ -49,7 +49,7 @@ A full-stack React Native mobile application built with Expo for finding EV char
 │   ├── SearchBar.tsx
 │   └── StationList.tsx
 ├── config/             # Configuration files
-│   └── firebase.ts
+│   └── supabase.ts
 ├── contexts/           # React contexts
 │   ├── AuthContext.tsx
 │   └── FavoritesContext.tsx

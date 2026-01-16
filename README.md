@@ -1,50 +1,208 @@
-# Welcome to your Expo app 👋
+# EV Charging Station Finder App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A full-stack React Native mobile application built with Expo for finding EV charging stations. Features include Google Maps integration, Firebase authentication, location services, and favorites management.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 🔐 **Authentication** - Email/Password login and registration with Firebase
+- 🗺️ **Google Maps** - Interactive map with custom styling
+- 📍 **Location Services** - Get user location and display on map
+- 🔍 **Search** - Search for locations and find nearby EV stations
+- ⚡ **EV Stations** - Display nearby charging stations with details
+- ❤️ **Favorites** - Save favorite stations with Firebase sync
+- 📱 **Tab Navigation** - Home and Favorites tabs
+- 🎨 **Modern UI** - Clean and intuitive user interface
 
+## 🚀 Quick Start
+
+### Step-by-Step Setup
+
+**👉 Follow the complete setup guide: [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)**
+
+This guide includes:
+- ✅ Detailed Firebase setup
+- ✅ Google Maps API configuration
+- ✅ Step-by-step instructions with screenshots references
+- ✅ Troubleshooting guide
+- ✅ Complete checklist
+
+### Quick Summary
+
+1. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Set up Firebase** (see [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md) for details)
+   - Create Firebase project
+   - Enable Authentication & Firestore
+   - Update `config/firebase.ts`
 
+3. **Set up Google Maps** (see [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md) for details)
+   - Create Google Cloud project
+   - Enable APIs & create keys
+   - Update `app.json` and component files
+
+4. **Run the app:**
    ```bash
-   npx expo start
+   npm start
    ```
+   Then press `a` for Android, `i` for iOS, or `w` for web.
 
-In the output, you'll find options to open the app in a
+## 📖 Documentation
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **[SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)** - Complete step-by-step setup guide ⭐ **START HERE**
+- **[SETUP.md](./SETUP.md)** - Technical setup details
+- **[QUICK_START.md](./QUICK_START.md)** - 5-minute quick setup
+- **[CONFIGURATION_CHECKLIST.md](./CONFIGURATION_CHECKLIST.md)** - Verify all configurations
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project Structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+├── app/
+│   ├── (tabs)/          # Tab navigation screens
+│   │   ├── index.tsx    # Home screen with map
+│   │   ├── favorites.tsx # Favorites screen
+│   │   └── _layout.tsx  # Tab layout
+│   ├── login.tsx        # Login/Register screen
+│   └── _layout.tsx      # Root layout
+├── components/          # Reusable components
+│   ├── Header.tsx
+│   ├── SearchBar.tsx
+│   └── StationList.tsx
+├── config/             # Configuration files
+│   └── firebase.ts
+├── contexts/           # React contexts
+│   ├── AuthContext.tsx
+│   └── FavoritesContext.tsx
+├── services/           # API services
+│   └── evStations.ts
+└── types/             # TypeScript types
+    └── index.ts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Configuration Required
 
-## Learn more
+Before running the app, you must configure:
 
-To learn more about developing your project with Expo, look at the following resources:
+1. **Firebase** (`config/firebase.ts`)
+   ```typescript
+   const firebaseConfig = {
+     apiKey: "YOUR_API_KEY",
+     // ... other config
+   };
+   ```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+2. **Google Maps API** (`app.json`)
+   ```json
+   {
+     "ios": {
+       "config": {
+         "googleMapsApiKey": "YOUR_IOS_KEY"
+       }
+     },
+     "android": {
+       "config": {
+         "googleMaps": {
+           "apiKey": "YOUR_ANDROID_KEY"
+         }
+       }
+     }
+   }
+   ```
 
-## Join the community
+3. **Google Places API** (in `components/SearchBar.tsx` and `services/evStations.ts`)
+   - Replace `YOUR_GOOGLE_PLACES_API_KEY` with your actual key
 
-Join our community of developers creating universal apps.
+## Features Breakdown
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Authentication
+- Email/Password authentication
+- Registration and login screens
+- Protected routes
+- Auto-redirect based on auth state
+
+### Maps & Location
+- Google Maps with custom dark theme
+- User location tracking
+- Location permissions handling
+- Custom markers for stations and user location
+
+### EV Stations
+- Display nearby stations
+- Station details (name, address, rating, price)
+- Availability status
+- Connector types
+- Distance calculation
+
+### Search
+- Location search
+- Find stations by address
+- Google Places integration
+
+### Favorites
+- Add/remove favorites
+- Firebase Firestore sync
+- AsyncStorage fallback
+- Favorites tab
+
+## Technologies Used
+
+- **React Native** - Mobile framework
+- **Expo** - Development platform
+- **Firebase** - Authentication & Database
+- **React Native Maps** - Map component
+- **Expo Location** - Location services
+- **TypeScript** - Type safety
+- **Expo Router** - File-based routing
+
+## Development
+
+```bash
+# Start development server
+npm start
+
+# Run on Android
+npm run android
+
+# Run on iOS
+npm run ios
+
+# Lint code
+npm run lint
+```
+
+## Next Steps / Enhancements
+
+- [ ] Integrate real EV station data API (Open Charge Map)
+- [ ] Add station details screen
+- [ ] Implement filters (connector type, availability, price)
+- [ ] Add navigation/directions
+- [ ] Push notifications
+- [ ] Offline support
+- [ ] User profile
+- [ ] Reviews and ratings
+
+## Troubleshooting
+
+### Maps not showing
+- Verify Google Maps API keys are correct
+- Check API restrictions in Google Cloud Console
+- Ensure billing is enabled
+
+### Location not working
+- Check app permissions in device settings
+- Test on real device if emulator has issues
+
+### Firebase errors
+- Verify Firebase config
+- Check Firestore security rules
+- Ensure Authentication is enabled
+
+## License
+
+This project is open source and available for educational purposes.
+
+## Support
+
+For detailed setup instructions, see [SETUP.md](./SETUP.md)

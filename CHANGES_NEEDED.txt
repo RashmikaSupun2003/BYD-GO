@@ -1,0 +1,89 @@
+================================================================================
+                    CHANGES NEEDED BEFORE RUNNING THE APP
+================================================================================
+
+1. FIREBASE CONFIGURATION
+   File: config/firebase.ts
+   
+   Replace these values with your Firebase project credentials:
+   - apiKey: "YOUR_API_KEY"
+   - authDomain: "YOUR_AUTH_DOMAIN"
+   - projectId: "YOUR_PROJECT_ID"
+   - storageBucket: "YOUR_STORAGE_BUCKET"
+   - messagingSenderId: "YOUR_MESSAGING_SENDER_ID"
+   - appId: "YOUR_APP_ID"
+   
+   How to get: Firebase Console → Project Settings → Your apps → Config
+
+2. GOOGLE MAPS API KEY (iOS)
+   File: app.json
+   Line: ~59
+   
+   Replace: "YOUR_IOS_GOOGLE_MAPS_API_KEY"
+   With: Your actual iOS Google Maps API key
+
+3. GOOGLE MAPS API KEY (Android)
+   File: app.json
+   Line: ~78
+   
+   Replace: "YOUR_ANDROID_GOOGLE_MAPS_API_KEY"
+   With: Your actual Android Google Maps API key
+
+4. GOOGLE PLACES API KEY (Search Bar)
+   File: components/SearchBar.tsx
+   Line: ~30 (in the fetch URL)
+   
+   Replace: "YOUR_GOOGLE_PLACES_API_KEY"
+   With: Your actual Google Places API key
+
+5. GOOGLE PLACES API KEY (EV Stations Service)
+   File: services/evStations.ts
+   Line: ~67
+   
+   Replace: "YOUR_GOOGLE_PLACES_API_KEY"
+   With: Your actual Google Places API key
+
+================================================================================
+                            SETUP STEPS
+================================================================================
+
+1. Run: npm install
+
+2. Set up Firebase:
+   - Create project at https://console.firebase.google.com/
+   - Enable Authentication (Email/Password)
+   - Enable Firestore Database
+   - Copy config to config/firebase.ts
+
+3. Set up Google Cloud:
+   - Create project at https://console.cloud.google.com/
+   - Enable: Maps SDK for Android, Maps SDK for iOS, Places API, Geocoding API
+   - Create API keys
+   - Update app.json and component files
+
+4. Run: npm start
+   Then press 'a' for Android or 'i' for iOS
+
+================================================================================
+                         DOCUMENTATION FILES
+================================================================================
+
+- QUICK_START.md          → 5-minute quick setup
+- SETUP.md                → Detailed setup instructions
+- CONFIGURATION_CHECKLIST.md → Verify all configurations
+- PROJECT_SUMMARY.md       → Complete project overview
+- README.md               → Project documentation
+
+================================================================================
+
+
+
+
+
+
+
+
+
+
+
+

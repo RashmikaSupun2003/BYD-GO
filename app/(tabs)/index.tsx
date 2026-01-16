@@ -1,98 +1,270 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import Header from '@/components/Header';
+import HorizontalStationList from '@/components/HorizontalStationList';
+import MapViewComponent from '@/components/MapView';
+import SearchBar from '@/components/SearchBar';
+import { getEVStations, searchEVStationsByAddress } from '@/services/evStations';
+import { EVStation, Location as LocationType } from '@/types';
+import * as Location from 'expo-location';
+import { Linking } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    Platform,
+    StyleSheet,
+    View,
+} from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+type Region = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
+
+// Center on Sri Lanka (Colombo area)
+const INITIAL_REGION = {
+  latitude: 6.9271,
+  longitude: 79.8612,
+  latitudeDelta: 0.5,
+  longitudeDelta: 0.5,
+};
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [location, setLocation] = useState<LocationType | null>(null);
+  const [searchedLocation, setSearchedLocation] = useState<LocationType | null>(null);
+  const [stations, setStations] = useState<EVStation[]>([]);
+  const [selectedStation, setSelectedStation] = useState<EVStation | null>(null);
+  const [region, setRegion] = useState<Region>(INITIAL_REGION);
+  const [loading, setLoading] = useState(true);
+  const mapRef = useRef<any>(null);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
+  useEffect(() => {
+    // Load stations with current location or default to Sri Lanka center
+    const locationToUse = location || {
+      latitude: 6.9271,
+      longitude: 79.8612,
+    };
+    loadStations(locationToUse);
+  }, [location]);
+
+  const getCurrentLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permission Denied',
+          'Location permission is required to find nearby charging stations.'
+        );
+        setLoading(false);
+        return;
+      }
+
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      const newLocation: LocationType = {
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      };
+
+      setLocation(newLocation);
+      setRegion({
+        latitude: newLocation.latitude,
+        longitude: newLocation.longitude,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+
+      if (mapRef.current && Platform.OS !== 'web') {
+        mapRef.current.animateToRegion({
+          latitude: newLocation.latitude,
+          longitude: newLocation.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        });
+      }
+    } catch (error) {
+      console.error('Error getting location:', error);
+      Alert.alert('Error', 'Failed to get your location');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadStations = async (locationToUse?: LocationType) => {
+    const loc = locationToUse || location;
+    if (!loc) {
+      // Use default Sri Lanka location
+      const defaultLoc: LocationType = {
+        latitude: 6.9271,
+        longitude: 79.8612,
+      };
+      try {
+        // Load all Keells stations, sorted by distance
+        const nearbyStations = await getEVStations(defaultLoc, 500); // Large radius to show all stations
+        const sortedStations = nearbyStations.sort((a, b) => {
+          const distA = a.distance || 0;
+          const distB = b.distance || 0;
+          return distA - distB;
+        });
+        setStations(sortedStations);
+      } catch (error) {
+        console.error('Error loading stations:', error);
+        Alert.alert('Error', 'Failed to load charging stations');
+      }
+      return;
+    }
+
+    try {
+      // Load all Keells stations, sorted by distance
+      const nearbyStations = await getEVStations(loc, 500); // Large radius to show all stations
+      const sortedStations = nearbyStations.sort((a, b) => {
+        const distA = a.distance || 0;
+        const distB = b.distance || 0;
+        return distA - distB;
+      });
+      setStations(sortedStations);
+    } catch (error) {
+      console.error('Error loading stations:', error);
+      Alert.alert('Error', 'Failed to load charging stations');
+    }
+  };
+
+  const handleLocationSelect = async (newLocation: LocationType, address: string) => {
+    setSearchedLocation(newLocation);
+    setLocation(newLocation);
+    setRegion({
+      latitude: newLocation.latitude,
+      longitude: newLocation.longitude,
+      latitudeDelta: 0.5,
+      longitudeDelta: 0.5,
+    });
+
+    if (mapRef.current && Platform.OS !== 'web') {
+      mapRef.current.animateToRegion({
+        latitude: newLocation.latitude,
+        longitude: newLocation.longitude,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
+      });
+    }
+
+    try {
+      // Load all Keells charging stations near the searched location
+      const foundStations = await searchEVStationsByAddress(address, newLocation);
+      setStations(foundStations);
+    } catch (error) {
+      console.error('Error searching stations:', error);
+      // Fallback to loading all stations
+      loadStations(newLocation);
+    }
+  };
+
+  const openDirections = (station: EVStation) => {
+    // Use searched location if available, otherwise use current location
+    const startLocation = searchedLocation || location;
+    
+    if (!startLocation) {
+      Alert.alert('Error', 'Location not available. Please enable location services.');
+      return;
+    }
+
+    const startLat = startLocation.latitude;
+    const startLng = startLocation.longitude;
+    const endLat = station.latitude;
+    const endLng = station.longitude;
+
+    let url = '';
+
+    if (Platform.OS === 'ios') {
+      // Apple Maps
+      url = `http://maps.apple.com/?saddr=${startLat},${startLng}&daddr=${endLat},${endLng}&dirflg=d`;
+    } else {
+      // Android - Google Maps
+      url = `https://www.google.com/maps/dir/?api=1&origin=${startLat},${startLng}&destination=${endLat},${endLng}&travelmode=driving`;
+    }
+
+    Linking.openURL(url).catch((err) => {
+      console.error('Error opening maps:', err);
+      Alert.alert('Error', 'Could not open maps application');
+    });
+  };
+
+  const handleStationPress = (station: EVStation) => {
+    setSelectedStation(station);
+    if (mapRef.current && Platform.OS !== 'web') {
+      mapRef.current.animateToRegion({
+        latitude: station.latitude,
+        longitude: station.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+  };
+
+  const handleMarkerPress = (station: EVStation) => {
+    setSelectedStation(station);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Header />
+      <View style={styles.mapContainer}>
+        <MapViewComponent
+          region={region}
+          location={location}
+          stations={stations}
+          onMarkerPress={handleMarkerPress}
+          mapRef={mapRef}
+        />
+        <SearchBar
+          onLocationSelect={handleLocationSelect}
+          currentLocation={location}
+        />
+        <View style={styles.horizontalListContainer}>
+          <HorizontalStationList
+            stations={stations}
+            onStationPress={handleStationPress}
+            onDirectionsPress={openDirections}
+          />
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  mapContainer: {
+    flex: 1,
+    overflow: 'visible',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
+  horizontalListContainer: {
+    position: 'absolute',
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    right: 0,
+    backgroundColor: 'transparent',
+    maxHeight: 280,
+    zIndex: 10,
   },
 });

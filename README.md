@@ -1,13 +1,13 @@
 # EV Charging Station Finder App
 
-A full-stack React Native mobile application built with Expo for finding EV charging stations. Features include Google Maps integration, Firebase authentication, location services, and favorites management.
+A full-stack React Native mobile application built with Expo for finding EV charging stations. Features include Google Maps integration, Supabase backend, location services, and favorites management.
 
 ## Features
 
-- 🔐 **Authentication** - Email/Password login and registration with clerk
+- 🔐 **Authentication** - User authentication with Clerk
 - 🗺️ **Google Maps** - Interactive map with custom styling
 - 📍 **Location Services** - Get user location and display on map
-- 🔍 **Search** - Search for locations and find nearby EV stations
+- 🔍 **Search** - Search for locations in Sri Lanka using OpenStreetMap
 - ⚡ **EV Stations** - Display nearby charging stations with details
 - ❤️ **Favorites** - Save favorite stations with Supabase sync
 - 📱 **Tab Navigation** - Home and Favorites tabs
@@ -22,7 +22,12 @@ A full-stack React Native mobile application built with Expo for finding EV char
    ```bash
    npm install
    ```
-2. **Set up Google Maps** (see [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md) for details)
+2. **Set up Supabase** (see [CHANGES_NEEDED.txt](./CHANGES_NEEDED.txt) for details)
+   - Create Supabase project
+   - Set up charging_stations and favorites tables
+   - Update `config/supabase.ts`
+
+3. **Set up Google Maps** (see [CHANGES_NEEDED.txt](./CHANGES_NEEDED.txt) for details)
    - Create Google Cloud project
    - Enable APIs & create keys
    - Update `app.json` and component files
@@ -59,6 +64,33 @@ A full-stack React Native mobile application built with Expo for finding EV char
     └── index.ts
 ```
 
+## Configuration Required
+
+Before running the app, you must configure:
+
+1. **Supabase** (`config/supabase.ts`)
+   ```typescript
+   const supabaseUrl = "YOUR_SUPABASE_URL";
+   const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY";
+   ```
+
+2. **Google Maps API** (`app.json`)
+   ```json
+   {
+     "ios": {
+       "config": {
+         "googleMapsApiKey": "YOUR_IOS_KEY"
+       }
+     },
+     "android": {
+       "config": {
+         "googleMaps": {
+           "apiKey": "YOUR_ANDROID_KEY"
+         }
+       }
+     }
+   }
+   ```
 
 ## Features Breakdown
 
@@ -88,7 +120,7 @@ A full-stack React Native mobile application built with Expo for finding EV char
 
 ### Favorites
 - Add/remove favorites
-- Firebase Firestore sync
+- Supabase database sync
 - AsyncStorage fallback
 - Favorites tab
 
@@ -96,8 +128,8 @@ A full-stack React Native mobile application built with Expo for finding EV char
 
 - **React Native** - Mobile framework
 - **Expo** - Development platform
+- **Supabase** - Backend & Database
 - **Clerk** - Authentication
-- **Supeabase** - Database
 - **React Native Maps** - Map component
 - **Expo Location** - Location services
 - **TypeScript** - Type safety
@@ -141,6 +173,10 @@ npm run lint
 - Check app permissions in device settings
 - Test on real device if emulator has issues
 
+### Supabase errors
+- Verify Supabase config
+- Check Row Level Security (RLS) policies
+- Ensure tables are created correctly
 
 ## License
 

@@ -6,7 +6,7 @@
 
 1. **Authentication System**
    - Login/Register screen (`app/login.tsx`)
-   - Firebase authentication integration
+   - Clerk authentication integration
    - Protected routes with auto-redirect
    - Auth context for state management
 
@@ -35,11 +35,11 @@
 
 6. **Services & Contexts**
    - `AuthContext.tsx` - Authentication state management
-   - `FavoritesContext.tsx` - Favorites management with Firebase
-   - `evStations.ts` - EV station service (mock data ready for API integration)
+   - `FavoritesContext.tsx` - Favorites management with Supabase
+   - `evStations.ts` - EV station service with Supabase integration
 
 7. **Configuration**
-   - Firebase setup (`config/firebase.ts`)
+   - Supabase setup (`config/supabase.ts`)
    - TypeScript types (`types/index.ts`)
    - App configuration (`app.json`)
 
@@ -54,17 +54,11 @@
 
 ### Required Changes (Must Do)
 
-1. **Firebase Configuration** (`config/firebase.ts`)
+1. **Supabase Configuration** (`config/supabase.ts`)
    ```typescript
-   // Replace these with your Firebase project credentials
-   const firebaseConfig = {
-     apiKey: "YOUR_API_KEY",           // ← Change this
-     authDomain: "YOUR_AUTH_DOMAIN",   // ← Change this
-     projectId: "YOUR_PROJECT_ID",      // ← Change this
-     storageBucket: "YOUR_STORAGE_BUCKET", // ← Change this
-     messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // ← Change this
-     appId: "YOUR_APP_ID"              // ← Change this
-   };
+   // Replace these with your Supabase project credentials
+   const supabaseUrl = "YOUR_SUPABASE_URL";      // ← Change this
+   const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY"; // ← Change this
    ```
 
 2. **Google Maps API Keys** (`app.json`)
@@ -85,9 +79,10 @@
    }
    ```
 
-3. **Google Places API Key** 
-   - `components/SearchBar.tsx` - Line with `YOUR_GOOGLE_PLACES_API_KEY`
-   - `services/evStations.ts` - Line with `YOUR_GOOGLE_PLACES_API_KEY`
+3. **Supabase Tables Setup**
+   - Create `charging_stations` table in Supabase
+   - Create `favorites` table in Supabase
+   - Set up Row Level Security (RLS) policies
 
 ### Optional Enhancements
 
@@ -126,7 +121,7 @@ EV-Charging-Station-App/
 │   ├── SearchBar.tsx          # Location search
 │   └── StationList.tsx        # Station list component
 ├── config/
-│   └── firebase.ts            # Firebase config ⚠️ UPDATE THIS
+│   └── supabase.ts            # Supabase config ⚠️ UPDATE THIS
 ├── contexts/
 │   ├── AuthContext.tsx        # Auth state
 │   └── FavoritesContext.tsx   # Favorites state
@@ -143,19 +138,18 @@ EV-Charging-Station-App/
 
 ## 🚀 Getting Started
 
-1. **Quick Start** (5 minutes)
-   - Follow [QUICK_START.md](./QUICK_START.md)
+1. **Quick Start**
+   - Install dependencies: `npm install`
+   - Set up Supabase configuration
+   - Run: `npm start`
 
-2. **Detailed Setup** (15-20 minutes)
-   - Follow [SETUP.md](./SETUP.md)
-
-3. **Verify Configuration**
-   - Use [CONFIGURATION_CHECKLIST.md](./CONFIGURATION_CHECKLIST.md)
+2. **Configuration**
+   - See [CHANGES_NEEDED.txt](./CHANGES_NEEDED.txt) for required changes
 
 ## 🎯 Features Implemented
 
 ✅ Login/Register UI  
-✅ Firebase Authentication  
+✅ Clerk Authentication  
 ✅ Tab Navigation  
 ✅ Google Map View with Custom Style  
 ✅ User Location Tracking  
@@ -176,11 +170,12 @@ EV-Charging-Station-App/
 npm install
 ```
 
-### Step 2: Firebase Setup
-1. Create Firebase project
-2. Enable Authentication (Email/Password)
-3. Enable Firestore
-4. Copy config to `config/firebase.ts`
+### Step 2: Supabase Setup
+1. Create Supabase project
+2. Create `charging_stations` table
+3. Create `favorites` table
+4. Set up Row Level Security (RLS) policies
+5. Copy config to `config/supabase.ts`
 
 ### Step 3: Google Maps Setup
 1. Create Google Cloud project
@@ -199,10 +194,10 @@ npm start
 
 | File | What to Change |
 |------|---------------|
-| `config/firebase.ts` | Firebase configuration object |
+| `config/supabase.ts` | Supabase configuration (URL and anon key) |
 | `app.json` | Google Maps API keys (iOS & Android) |
-| `components/SearchBar.tsx` | Google Places API key |
-| `services/evStations.ts` | Google Places API key, integrate real API |
+| `components/SearchBar.tsx` | OpenStreetMap integration (no API key needed) |
+| `services/evStations.ts` | Supabase integration for charging stations |
 | `app/_layout.tsx` | Custom fonts (optional) |
 
 ## ⚠️ Important Notes
@@ -215,20 +210,22 @@ npm start
 
 4. **Testing**: Test on real device for best location services experience.
 
-5. **Firestore Rules**: Set up proper security rules (see SETUP.md).
+5. **Supabase RLS**: Set up proper Row Level Security policies in Supabase dashboard.
 
 ## 🐛 Troubleshooting
 
 - **Maps not showing**: Check API keys in `app.json`
-- **Can't login**: Verify Firebase config in `config/firebase.ts`
+- **Can't login**: Verify Clerk authentication setup
 - **Location not working**: Grant permissions on device
 - **Build errors**: Clear cache with `expo start -c`
+- **No stations showing**: Check Supabase config and RLS policies
 
 ## 📚 Additional Resources
 
 - [Expo Documentation](https://docs.expo.dev/)
 - [React Native Maps](https://github.com/react-native-maps/react-native-maps)
-- [Firebase Documentation](https://firebase.google.com/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Clerk Documentation](https://clerk.com/docs)
 - [Google Maps Platform](https://developers.google.com/maps)
 
 ## ✨ Next Steps
@@ -242,7 +239,8 @@ npm start
 
 ---
 
-**Ready to start?** Begin with [QUICK_START.md](./QUICK_START.md)!
+**Ready to start?** See [CHANGES_NEEDED.txt](./CHANGES_NEEDED.txt) for setup instructions!
+
 
 
 

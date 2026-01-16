@@ -2,18 +2,14 @@
                     CHANGES NEEDED BEFORE RUNNING THE APP
 ================================================================================
 
-1. FIREBASE CONFIGURATION
-   File: config/firebase.ts
+1. SUPABASE CONFIGURATION
+   File: config/supabase.ts
    
-   Replace these values with your Firebase project credentials:
-   - apiKey: "YOUR_API_KEY"
-   - authDomain: "YOUR_AUTH_DOMAIN"
-   - projectId: "YOUR_PROJECT_ID"
-   - storageBucket: "YOUR_STORAGE_BUCKET"
-   - messagingSenderId: "YOUR_MESSAGING_SENDER_ID"
-   - appId: "YOUR_APP_ID"
+   Replace these values with your Supabase project credentials:
+   - supabaseUrl: "YOUR_SUPABASE_URL"
+   - supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY"
    
-   How to get: Firebase Console → Project Settings → Your apps → Config
+   How to get: Supabase Dashboard → Project Settings → API
 
 2. GOOGLE MAPS API KEY (iOS)
    File: app.json
@@ -29,19 +25,11 @@
    Replace: "YOUR_ANDROID_GOOGLE_MAPS_API_KEY"
    With: Your actual Android Google Maps API key
 
-4. GOOGLE PLACES API KEY (Search Bar)
-   File: components/SearchBar.tsx
-   Line: ~30 (in the fetch URL)
-   
-   Replace: "YOUR_GOOGLE_PLACES_API_KEY"
-   With: Your actual Google Places API key
-
-5. GOOGLE PLACES API KEY (EV Stations Service)
-   File: services/evStations.ts
-   Line: ~67
-   
-   Replace: "YOUR_GOOGLE_PLACES_API_KEY"
-   With: Your actual Google Places API key
+4. SUPABASE TABLES SETUP
+   - Create 'charging_stations' table in Supabase
+   - Create 'favorites' table in Supabase
+   - Set up Row Level Security (RLS) policies
+   - See Supabase dashboard for table schemas
 
 ================================================================================
                             SETUP STEPS
@@ -49,11 +37,11 @@
 
 1. Run: npm install
 
-2. Set up Firebase:
-   - Create project at https://console.firebase.google.com/
-   - Enable Authentication (Email/Password)
-   - Enable Firestore Database
-   - Copy config to config/firebase.ts
+2. Set up Supabase:
+   - Create project at https://supabase.com/
+   - Create 'charging_stations' table
+   - Create 'favorites' table
+   - Copy config to config/supabase.ts
 
 3. Set up Google Cloud:
    - Create project at https://console.cloud.google.com/
@@ -75,6 +63,7 @@
 - README.md               → Project documentation
 
 ================================================================================
+
 
 
 

@@ -102,16 +102,8 @@ export default function SignUpScreen() {
         await setActive({ session: result.createdSessionId });
         router.replace('/(tabs)');
       } else {
-        Alert.alert(
-          'Verification Required',
-          'Please check your email for a verification code.',
-          [
-            {
-              text: 'OK',
-              onPress: () => router.replace('/(tabs)'),
-            },
-          ]
-        );
+        // Redirect to verification screen
+        router.replace('/verify-email');
       }
     } catch (error: any) {
       console.error('Sign up error:', error);

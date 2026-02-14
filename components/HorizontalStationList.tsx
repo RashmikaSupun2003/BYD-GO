@@ -83,13 +83,13 @@ export default function HorizontalStationList({
 
           <View style={styles.cardDetails}>
             <View style={styles.chargerInfo}>
-              <Ionicons name="car-outline" size={14} color="#007AFF" />
+              <Ionicons name="car-outline" size={14} color="#2DBE7E" />
               <Text style={styles.chargerText}>
                 Fast Charger (CCS2 & CHAdeMO)
               </Text>
             </View>
             <View style={styles.connectorInfo}>
-              <Ionicons name="flash-outline" size={14} color="#4CAF50" />
+              <Ionicons name="flash-outline" size={14} color="#2DBE7E" />
               <Text style={styles.connectorText}>
                 {station.connectorCount || 0} connectors
               </Text>
@@ -99,7 +99,7 @@ export default function HorizontalStationList({
           <View
             style={[
               styles.availability,
-              { backgroundColor: station.available ? '#4CAF50' : '#F44336' },
+              { backgroundColor: station.available ? '#2DBE7E' : '#F44336' },
             ]}
           >
             <Text style={styles.availabilityText}>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#2DBE7E',
     width: 40,
     height: 40,
     borderRadius: 20,

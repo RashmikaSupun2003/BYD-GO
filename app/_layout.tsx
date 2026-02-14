@@ -28,6 +28,7 @@ function RootLayoutNav() {
     const inAuthGroup = segments[0] === '(tabs)';
     const isWelcome = segments[0] === 'welcome';
     const isLogin = segments[0] === 'login';
+    const isSignUp = segments[0] === 'signup';
     const isSSOCallback = segments[0] === 'sso-callback';
     const currentRoute = segments[0];
 
@@ -36,15 +37,15 @@ function RootLayoutNav() {
       if (inAuthGroup) {
         // User is trying to access protected routes
         router.replace('/welcome');
-      } else if (!isWelcome && !isLogin && !isSSOCallback && !currentRoute?.includes('sign-in') && !currentRoute?.includes('sign-up')) {
-        // Not on welcome, login, or SSO callback, redirect to welcome (initial launch)
+      } else if (!isWelcome && !isLogin && !isSignUp && !isSSOCallback && !currentRoute?.includes('sign-in') && !currentRoute?.includes('sign-up')) {
+        // Not on welcome, login, signup, or SSO callback, redirect to welcome (initial launch)
         router.replace('/welcome');
       }
-      // If already on welcome, login, or SSO callback, stay there
+      // If already on welcome, login, signup, or SSO callback, stay there
     } else if (isSignedIn && user) {
       // If authenticated, redirect to home page (app/(tabs)/index.tsx)
       // (tabs) route automatically shows index route which is the home page
-      if (!inAuthGroup && currentRoute !== 'login' && !currentRoute?.includes('sign-in') && !currentRoute?.includes('sign-up')) {
+      if (!inAuthGroup && currentRoute !== 'login' && currentRoute !== 'signup' && !currentRoute?.includes('sign-in') && !currentRoute?.includes('sign-up')) {
         // User is authenticated but not on tabs, redirect to home page
         router.replace('/(tabs)');
       }
@@ -56,6 +57,7 @@ function RootLayoutNav() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="welcome" />
         <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
         <Stack.Screen name="sso-callback" />
         <Stack.Screen name="(tabs)" />
       </Stack>
@@ -84,13 +86,13 @@ export default function RootLayout() {
   return (
     <ErrorBoundary>
       <CustomThemeProvider>
-        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-          <AuthProvider>
-            <FavoritesProvider>
-              <RootLayoutNav />
-            </FavoritesProvider>
-          </AuthProvider>
-        </ClerkProvider>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+      <AuthProvider>
+        <FavoritesProvider>
+          <RootLayoutNav />
+        </FavoritesProvider>
+      </AuthProvider>
+    </ClerkProvider>
       </CustomThemeProvider>
     </ErrorBoundary>
   );

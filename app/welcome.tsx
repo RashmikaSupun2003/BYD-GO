@@ -1,102 +1,129 @@
-import { Colors } from '@/constants/theme';
-import { useAuth } from '@/contexts/AuthContext';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { PRIMARY_GREEN } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRef, useState } from 'react';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+interface OnboardingSlide {
+  id: number;
+  title: string;
+  description: string;
+  icon: keyof typeof Ionicons.glyphMap;
+}
+
+const slides: OnboardingSlide[] = [
+  {
+    id: 1,
+    title: 'Find Nearby Chargers',
+    description: 'Discover EV charging stations near you with real-time availability and detailed information.',
+    icon: 'location',
+  },
+  {
+    id: 2,
+    title: 'Plan Your Journey',
+    description: 'Plan long EV trips with confidence, finding charging stations along your route.',
+    icon: 'map',
+  },
+  {
+    id: 3,
+    title: 'Navigate with Ease',
+    description: 'Get turn-by-turn directions to charging stations with integrated navigation.',
+    icon: 'navigate',
+  },
+];
 
 export default function WelcomeScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
-  const { loginWithGoogle, user, isSignedIn } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  useEffect(() => {
-    // If user is authenticated, navigate to home page (app/(tabs)/index.tsx)
-    // (tabs) route automatically shows index route which is the home page
-    if (isSignedIn && user) {
-      router.replace('/(tabs)');
-    }
-  }, [user, isSignedIn]);
+  const handleScroll = (event: any) => {
+    const slideIndex = Math.round(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+    setCurrentSlide(slideIndex);
+  };
 
-  const handleGoogleLogin = async () => {
-    setLoading(true);
-    try {
-      await loginWithGoogle();
-      // Navigation will happen automatically via useEffect when user state changes
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to sign in with Google');
-      setLoading(false);
+  const handleNext = () => {
+    if (currentSlide < slides.length - 1) {
+      const nextSlide = currentSlide + 1;
+      scrollViewRef.current?.scrollTo({
+        x: nextSlide * SCREEN_WIDTH,
+        animated: true,
+      });
+      setCurrentSlide(nextSlide);
+    } else {
+      // Last slide - navigate to login
+      router.replace('/login');
     }
   };
 
+  const handleSkip = () => {
+    router.replace('/login');
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.content}>
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('@/assets/images/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
+    <View style={styles.container}>
+      {/* Skip Button */}
+      <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+        <Text style={styles.skipText}>Skip</Text>
+      </TouchableOpacity>
 
-        {/* Photo/Illustration */}
-        <View style={styles.imageContainer}>
-          <View style={[styles.illustration, { backgroundColor: colors.tint + '20' }]}>
-            <Ionicons name="flash" size={80} color={colors.tint} />
+      {/* Onboarding Slides */}
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        bounces={false}
+      >
+        {slides.map((slide) => (
+          <View key={slide.id} style={styles.slide}>
+            {/* Illustration Container */}
+            <View style={styles.illustrationContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name={slide.icon} size={64} color={PRIMARY_GREEN} />
+              </View>
+            </View>
+
+            {/* Content */}
+            <View style={styles.content}>
+              <Text style={styles.title}>{slide.title}</Text>
+              <Text style={styles.description}>{slide.description}</Text>
+            </View>
+
+            {/* Pagination Dots */}
+            <View style={styles.pagination}>
+              {slides.map((_, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.dot,
+                    currentSlide === index && styles.dotActive,
+                  ]}
+                />
+              ))}
+            </View>
           </View>
-        </View>
+        ))}
+      </ScrollView>
 
-        {/* Description */}
-        <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: colors.text }]}>
-            BYD GO
-          </Text>
-          <Text style={[styles.description, { color: colors.icon }]}>
-            Find and navigate to electric vehicle charging stations near you. 
-            Discover available chargers, check real-time availability, and plan 
-            your charging stops effortlessly.
-          </Text>
-        </View>
-
-        {/* Google Login Button */}
-        <TouchableOpacity
-          style={[
-            styles.googleButton,
-            { backgroundColor: '#fff', borderColor: '#e0e0e0' },
-            loading && styles.googleButtonDisabled
-          ]}
-          onPress={handleGoogleLogin}
-          activeOpacity={0.7}
-          disabled={loading}
-        >
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator color="#4285F4" size="small" />
-              <Text style={[styles.googleButtonText, { marginLeft: 12 }]}>Signing in...</Text>
-            </View>
-          ) : (
-            <View style={styles.buttonContent}>
-              <Ionicons name="logo-google" size={24} color="#4285F4" />
-              <Text style={styles.googleButtonText}>Continue with Google</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-
-        {/* Alternative login option */}
-        <TouchableOpacity
-          style={styles.alternativeLogin}
-          onPress={() => router.push('/login')}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.alternativeLoginText, { color: colors.icon }]}>
-            Or sign in with email
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Next Button - Floating Circular Arrow */}
+      <TouchableOpacity
+        style={styles.nextButton}
+        onPress={handleNext}
+        activeOpacity={0.8}
+      >
+        <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -104,96 +131,92 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-  content: {
+  skipButton: {
+    position: 'absolute',
+    top: 60,
+    right: 24,
+    zIndex: 10,
+    padding: 8,
+  },
+  skipText: {
+    fontSize: 16,
+    color: '#999999',
+    fontWeight: '400',
+  },
+  slide: {
+    width: SCREEN_WIDTH,
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 40,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
   },
-  logoContainer: {
-    width: 120,
-    height: 120,
-    marginBottom: 20,
-  },
-  logo: {
-    width: '100%',
-    height: '100%',
-  },
-  imageContainer: {
+  illustrationContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    marginVertical: 40,
+    marginBottom: 60,
   },
-  illustration: {
+  iconCircle: {
     width: 200,
     height: 200,
     borderRadius: 100,
+    backgroundColor: '#F0F9F5',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textContainer: {
-    width: '100%',
+  content: {
     alignItems: 'center',
-    marginBottom: 40,
+    paddingHorizontal: 20,
+    marginBottom: 60,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#1A1A1A',
     textAlign: 'center',
     marginBottom: 16,
+    letterSpacing: -0.5,
   },
   description: {
     fontSize: 16,
+    color: '#666666',
     textAlign: 'center',
     lineHeight: 24,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
   },
-  googleButton: {
-    width: '100%',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  buttonContent: {
+  pagination: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
-  },
-  loadingContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 100,
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#E0E0E0',
+  },
+  dotActive: {
+    width: 24,
+    backgroundColor: PRIMARY_GREEN,
+  },
+  nextButton: {
+    position: 'absolute',
+    bottom: 40,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: PRIMARY_GREEN,
     justifyContent: 'center',
-  },
-  googleButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
-  },
-  googleButtonDisabled: {
-    opacity: 0.6,
-  },
-  alternativeLogin: {
-    marginTop: 16,
-    paddingVertical: 12,
-  },
-  alternativeLoginText: {
-    fontSize: 14,
-    textAlign: 'center',
+    alignItems: 'center',
+    shadowColor: PRIMARY_GREEN,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });
-

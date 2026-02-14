@@ -18,6 +18,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginWithFacebook: () => Promise<void>;
+  loginWithApple: () => Promise<void>;
   logout: () => Promise<void>;
   isSignedIn: boolean;
 }
@@ -61,6 +63,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const loginWithFacebook = async () => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy: 'oauth_facebook',
+      });
+
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+      }
+    } catch (error: any) {
+      console.error('Facebook sign-in error:', error);
+      throw new Error(error.message || 'Failed to sign in with Facebook');
+    }
+  };
+
+  const loginWithApple = async () => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy: 'oauth_apple',
+      });
+
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+      }
+    } catch (error: any) {
+      console.error('Apple sign-in error:', error);
+      throw new Error(error.message || 'Failed to sign in with Apple');
+    }
+  };
+
   const logout = async () => {
     try {
       await clerkSignOut();
@@ -78,6 +110,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         loginWithGoogle,
+        loginWithFacebook,
+        loginWithApple,
         logout,
         isSignedIn: isSignedIn || false,
       }}

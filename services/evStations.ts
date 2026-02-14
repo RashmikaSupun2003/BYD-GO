@@ -133,6 +133,8 @@ export async function getEVStations(
   try {
     // Fetch charging stations from Supabase
     console.log('Fetching stations from Supabase...');
+    console.log('Supabase URL:', 'https://dpzauorvmzfpbslxktyj.supabase.co');
+    
     const { data, error } = await supabase
       .from('charging_stations')
       .select('*')
@@ -145,15 +147,28 @@ export async function getEVStations(
         hint: error.hint,
         code: error.code,
       });
+      console.error('Full Supabase Error Object:', JSON.stringify(error, null, 2));
+      
+      // Check for common errors
+      if (error.code === 'PGRST301' || error.message?.includes('permission')) {
+        console.error('⚠️ Row Level Security (RLS) Error: The charging_stations table may have RLS enabled. Please disable RLS or create a policy to allow public read access.');
+      }
+      if (error.message?.includes('relation') || error.message?.includes('does not exist')) {
+        console.error('⚠️ Table Error: The charging_stations table may not exist. Please verify the table name in your Supabase dashboard.');
+      }
+      
       return [];
     }
 
     console.log('Supabase query result:', { dataLength: data?.length, data: data });
 
     if (!data || data.length === 0) {
-      console.log('No stations found in Supabase');
+      console.log('⚠️ No stations found in Supabase - returning empty array');
+      console.log('💡 Tip: Check if RLS is disabled or if you have data in the charging_stations table');
       return [];
     }
+
+    console.log(`✅ Successfully fetched ${data.length} stations from Supabase`);
 
     // Convert Supabase rows to EVStation format
     const stations = data.map((row) => convertToEVStation(row, location));

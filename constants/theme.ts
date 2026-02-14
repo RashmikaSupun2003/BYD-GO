@@ -1,29 +1,45 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * BYD GO - Modern EV Charging Station App
+ * Color scheme: Soft green (#2DBE7E) as primary, white background, dark gray text
  */
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// BYD GO Brand Colors
+export const PRIMARY_GREEN = '#2DBE7E';
+export const PRIMARY_GREEN_DARK = '#25A06A';
+export const TEXT_DARK = '#1A1A1A';
+export const TEXT_GRAY = '#666666';
+export const TEXT_LIGHT_GRAY = '#999999';
+export const BACKGROUND_WHITE = '#FFFFFF';
+export const BORDER_LIGHT = '#E0E0E0';
+export const BACKGROUND_LIGHT = '#F5F5F5';
+
+const tintColorLight = PRIMARY_GREEN;
+const tintColorDark = PRIMARY_GREEN;
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: TEXT_DARK,
+    background: BACKGROUND_WHITE,
+    tint: PRIMARY_GREEN,
+    icon: TEXT_GRAY,
+    tabIconDefault: TEXT_LIGHT_GRAY,
+    tabIconSelected: PRIMARY_GREEN,
+    border: BORDER_LIGHT,
+    cardBackground: BACKGROUND_WHITE,
+    inputBackground: BACKGROUND_WHITE,
   },
   dark: {
     text: '#ECEDEE',
     background: '#151718',
-    tint: tintColorDark,
+    tint: PRIMARY_GREEN,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: PRIMARY_GREEN,
+    border: '#333333',
+    cardBackground: '#1F1F1F',
+    inputBackground: '#2A2A2A',
   },
 };
 

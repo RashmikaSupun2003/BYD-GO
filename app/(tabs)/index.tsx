@@ -105,12 +105,14 @@ export default function HomeScreen() {
       try {
         // Load all Keells stations, sorted by distance
         const nearbyStations = await getEVStations(defaultLoc, 500); // Large radius to show all stations
+        console.log('Loaded stations count (default):', nearbyStations.length);
         const sortedStations = nearbyStations.sort((a, b) => {
           const distA = a.distance || 0;
           const distB = b.distance || 0;
           return distA - distB;
         });
         setStations(sortedStations);
+        console.log('Stations set in state (default):', sortedStations.length);
       } catch (error) {
         console.error('Error loading stations:', error);
         Alert.alert('Error', 'Failed to load charging stations');
@@ -121,12 +123,14 @@ export default function HomeScreen() {
     try {
       // Load all Keells stations, sorted by distance
       const nearbyStations = await getEVStations(loc, 500); // Large radius to show all stations
+      console.log('Loaded stations count:', nearbyStations.length);
       const sortedStations = nearbyStations.sort((a, b) => {
         const distA = a.distance || 0;
         const distB = b.distance || 0;
         return distA - distB;
       });
       setStations(sortedStations);
+      console.log('Stations set in state:', sortedStations.length);
     } catch (error) {
       console.error('Error loading stations:', error);
       Alert.alert('Error', 'Failed to load charging stations');
@@ -212,7 +216,7 @@ export default function HomeScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color="#2DBE7E" />
       </View>
     );
   }
@@ -237,8 +241,8 @@ export default function HomeScreen() {
             stations={stations}
             onStationPress={handleStationPress}
             onDirectionsPress={openDirections}
-          />
-        </View>
+        />
+      </View>
       </View>
     </View>
   );
@@ -247,7 +251,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
   },
   loadingContainer: {
     flex: 1,

@@ -26,6 +26,14 @@ export default function MapViewComponent({
   onMarkerPress,
   mapRef,
 }: MapViewProps) {
+  // Debug logging
+  React.useEffect(() => {
+    console.log('MapView - Stations received:', stations?.length || 0);
+    if (stations && stations.length > 0) {
+      console.log('MapView - First station:', stations[0]);
+    }
+  }, [stations]);
+
   return (
     <MapView
       ref={mapRef}
@@ -54,25 +62,29 @@ export default function MapViewComponent({
         </Marker>
       )}
 
-      {stations.map((station) => (
-        <Marker
-          key={station.id}
-          coordinate={{
-            latitude: station.latitude,
-            longitude: station.longitude,
-          }}
-          title={station.name}
-          description={station.address}
-          onPress={() => onMarkerPress(station)}
-          anchor={{ x: 0.5, y: 1 }}
-        >
-          <Image
-            source={require('@/assets/images/marker.png')}
-            style={styles.stationMarker}
-            resizeMode="contain"
-          />
-        </Marker>
-      ))}
+      {stations && stations.length > 0 ? (
+        stations.map((station) => (
+          <Marker
+            key={station.id}
+            coordinate={{
+              latitude: station.latitude,
+              longitude: station.longitude,
+            }}
+            title={station.name}
+            description={station.address}
+            onPress={() => onMarkerPress(station)}
+            anchor={{ x: 0.5, y: 1 }}
+          >
+            <Image
+              source={require('@/assets/images/marker.png')}
+              style={styles.stationMarker}
+              resizeMode="contain"
+            />
+          </Marker>
+        ))
+      ) : (
+        console.log('No stations to display on map')
+      )}
     </MapView>
   );
 }

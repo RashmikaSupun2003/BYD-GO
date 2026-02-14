@@ -46,9 +46,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     try {
       const userEmail = getUserEmail();
       if (user && userEmail) {
-        loadFavorites();
-      } else {
-        // If no user, clear favorites
+      loadFavorites();
+    } else {
+      // If no user, clear favorites
         setFavorites([]);
         setLoading(false);
       }

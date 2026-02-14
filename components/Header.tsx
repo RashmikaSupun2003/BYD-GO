@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/theme';
+import { PRIMARY_GREEN } from '@/constants/theme';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -9,26 +9,25 @@ interface HeaderProps {
   showThemeToggle?: boolean;
 }
 
-export default function Header({ title = 'EV Charging Stations', showThemeToggle = false }: HeaderProps) {
+export default function Header({ title = 'BYD GO', showThemeToggle = false }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
-  const colors = Colors[theme];
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background, borderBottomColor: theme === 'dark' ? '#333' : '#e0e0e0' }]}>
+    <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
         {showThemeToggle && (
           <View style={styles.themeToggleContainer}>
-            <Ionicons 
-              name={theme === 'dark' ? 'moon' : 'sunny'} 
-              size={20} 
-              color={colors.text} 
+            <Ionicons
+              name={theme === 'dark' ? 'moon' : 'sunny'}
+              size={20}
+              color={theme === 'dark' ? '#ECEDEE' : '#1A1A1A'}
               style={styles.themeIcon}
             />
             <Switch
               value={theme === 'dark'}
               onValueChange={toggleTheme}
-              trackColor={{ false: '#767577', true: '#007AFF' }}
+              trackColor={{ false: '#767577', true: PRIMARY_GREEN }}
               thumbColor={theme === 'dark' ? '#fff' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
             />
@@ -41,17 +40,17 @@ export default function Header({ title = 'EV Charging Stations', showThemeToggle
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     paddingTop: 50,
-    paddingBottom: 15,
+    paddingBottom: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#E0E0E0',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   content: {
     flexDirection: 'row',
@@ -61,6 +60,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#1A1A1A',
   },
   themeToggleContainer: {
     flexDirection: 'row',
@@ -71,9 +71,3 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
-
-
-
-
-
-

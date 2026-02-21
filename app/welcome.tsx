@@ -1,9 +1,20 @@
-import { PRIMARY_GREEN } from '@/constants/theme';
+import {
+  PRIMARY_GREEN,
+  SHADOW_SMALL,
+  SHADOW_MEDIUM,
+  SHADOW_BUTTON,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  BORDER_LIGHT,
+} from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
   Dimensions,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -71,9 +82,18 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.container}>
       {/* Skip Button */}
-      <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+      <TouchableOpacity style={styles.skipButton} onPress={handleSkip} activeOpacity={0.7}>
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
+
+      {/* Logo at Top - Centered and Properly Spaced */}
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('@/assets/images/BYDGOlogo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
 
       {/* Onboarding Slides */}
       <ScrollView
@@ -87,11 +107,9 @@ export default function WelcomeScreen() {
       >
         {slides.map((slide) => (
           <View key={slide.id} style={styles.slide}>
-            {/* Illustration Container */}
-            <View style={styles.illustrationContainer}>
-              <View style={styles.iconCircle}>
-                <Ionicons name={slide.icon} size={64} color={PRIMARY_GREEN} />
-              </View>
+            {/* Simple Icon - No Heavy Background */}
+            <View style={styles.iconContainer}>
+              <Ionicons name={slide.icon} size={72} color={PRIMARY_GREEN} />
             </View>
 
             {/* Content */}
@@ -100,7 +118,7 @@ export default function WelcomeScreen() {
               <Text style={styles.description}>{slide.description}</Text>
             </View>
 
-            {/* Pagination Dots */}
+            {/* Minimal Pagination Dots */}
             <View style={styles.pagination}>
               {slides.map((_, index) => (
                 <View
@@ -116,13 +134,13 @@ export default function WelcomeScreen() {
         ))}
       </ScrollView>
 
-      {/* Next Button - Floating Circular Arrow */}
+      {/* Next Button - Clean and Modern */}
       <TouchableOpacity
         style={styles.nextButton}
         onPress={handleNext}
         activeOpacity={0.8}
       >
-        <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
+        <Ionicons name="arrow-forward" size={22} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -131,76 +149,85 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND_SOFT,
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 70,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 5,
+    paddingHorizontal: 24,
+  },
+  logo: {
+    width: 220,
+    height: 72,
   },
   skipButton: {
     position: 'absolute',
     top: 60,
     right: 24,
     zIndex: 10,
-    padding: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   skipText: {
     fontSize: 16,
-    color: '#999999',
-    fontWeight: '400',
+    color: TEXT_GRAY,
+    fontWeight: '500',
   },
   slide: {
     width: SCREEN_WIDTH,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: 24,
+    paddingTop: 180,
   },
-  illustrationContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  iconContainer: {
+    marginBottom: 48,
     alignItems: 'center',
-    marginBottom: 60,
-  },
-  iconCircle: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: '#F0F9F5',
     justifyContent: 'center',
-    alignItems: 'center',
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 60,
+    paddingHorizontal: 24,
+    marginBottom: 80,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
+    fontSize: 32,
+    fontWeight: '700',
+    color: TEXT_DARK,
     textAlign: 'center',
     marginBottom: 16,
-    letterSpacing: -0.5,
+    lineHeight: 40,
   },
   description: {
     fontSize: 16,
-    color: '#666666',
+    color: TEXT_GRAY,
     textAlign: 'center',
     lineHeight: 24,
-    paddingHorizontal: 20,
+    paddingHorizontal: 8,
+    fontWeight: '400',
   },
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 120,
     gap: 8,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#E0E0E0',
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: BORDER_LIGHT,
   },
   dotActive: {
     width: 24,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: PRIMARY_GREEN,
   },
   nextButton: {
@@ -213,10 +240,6 @@ const styles = StyleSheet.create({
     backgroundColor: PRIMARY_GREEN,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: PRIMARY_GREEN,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    ...SHADOW_BUTTON,
   },
 });

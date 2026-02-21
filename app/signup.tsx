@@ -17,6 +17,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  SHADOW_SMALL,
+  SHADOW_BUTTON,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+} from '@/constants/theme';
+import { Image } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -157,8 +168,17 @@ export default function SignUpScreen() {
               onPress={() => router.replace('/welcome')}
               activeOpacity={0.7}
             >
-              <Ionicons name="arrow-back" size={24} color="#1A1A1A" />
+              <Ionicons name="arrow-back" size={24} color={TEXT_DARK} />
             </TouchableOpacity>
+          </View>
+
+          {/* Logo */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('@/assets/images/BYDGOlogo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
 
           {/* Title Section */}
@@ -220,7 +240,7 @@ export default function SignUpScreen() {
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
                 placeholder="Full Name"
-                placeholderTextColor="#999999"
+                placeholderTextColor={TEXT_GRAY}
                 value={name}
                 onChangeText={(text) => {
                   setName(text);
@@ -236,7 +256,7 @@ export default function SignUpScreen() {
               <TextInput
                 style={[styles.input, errors.email && styles.inputError]}
                 placeholder="Email Address"
-                placeholderTextColor="#999999"
+                placeholderTextColor={TEXT_GRAY}
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -254,7 +274,7 @@ export default function SignUpScreen() {
               <TextInput
                 style={[styles.input, errors.password && styles.inputError]}
                 placeholder="Password"
-                placeholderTextColor="#999999"
+                placeholderTextColor={TEXT_GRAY}
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -271,7 +291,7 @@ export default function SignUpScreen() {
                 <Ionicons
                   name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                   size={20}
-                  color="#999999"
+                  color={TEXT_GRAY}
                 />
               </TouchableOpacity>
               {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
@@ -285,9 +305,9 @@ export default function SignUpScreen() {
                   setAgreeToTerms(value);
                   setErrors({ ...errors, terms: undefined });
                 }}
-                trackColor={{ false: '#E0E0E0', true: '#1A1A1A' }}
+                trackColor={{ false: BORDER_LIGHT, true: PRIMARY_GREEN }}
                 thumbColor="#FFFFFF"
-                ios_backgroundColor="#E0E0E0"
+                ios_backgroundColor={BORDER_LIGHT}
               />
               <View style={styles.termsTextContainer}>
                 <Text style={styles.termsText}>
@@ -329,7 +349,7 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND_SOFT,
   },
   scrollContent: {
     flexGrow: 1,
@@ -337,11 +357,19 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 70,
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 40,
+    marginBottom: 32,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 48,
+  },
+  logo: {
+    width: 220,
+    height: 72,
   },
   backButton: {
     width: 40,
@@ -351,18 +379,19 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     marginBottom: 32,
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
+    fontWeight: '700',
+    color: TEXT_DARK,
     marginBottom: 8,
-    letterSpacing: -0.5,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#999999',
-    lineHeight: 22,
+    color: TEXT_GRAY,
+    textAlign: 'center',
   },
   socialSection: {
     marginBottom: 24,
@@ -372,18 +401,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND_WHITE,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
+    borderColor: BORDER_LIGHT,
+    borderRadius: 20,
+    height: 56,
+    paddingHorizontal: 24,
     gap: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...SHADOW_SMALL,
   },
   appleButton: {
     backgroundColor: '#000000',
@@ -391,29 +416,29 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#1A1A1A',
+    fontWeight: '600',
+    color: TEXT_DARK,
   },
   appleButtonText: {
     color: '#FFFFFF',
   },
   buttonDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 24,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: BORDER_LIGHT,
   },
   dividerText: {
     marginHorizontal: 16,
     fontSize: 14,
-    color: '#999999',
+    color: TEXT_GRAY,
     fontWeight: '500',
   },
   form: {
@@ -424,30 +449,31 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   input: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    backgroundColor: BACKGROUND_WHITE,
+    borderRadius: 16,
+    paddingHorizontal: 20,
     fontSize: 16,
-    color: '#1A1A1A',
+    color: TEXT_DARK,
     height: 56,
+    borderWidth: 1,
+    borderColor: BORDER_LIGHT,
   },
   inputError: {
-    borderWidth: 1,
     borderColor: '#FF3B30',
-    backgroundColor: '#FFF5F5',
+    borderWidth: 1.5,
   },
   eyeIcon: {
     position: 'absolute',
-    right: 16,
+    right: 20,
     top: 18,
     padding: 4,
   },
   errorText: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#FF3B30',
     marginTop: 6,
     marginLeft: 4,
+    fontWeight: '500',
   },
   termsContainer: {
     flexDirection: 'row',
@@ -460,31 +486,27 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: 14,
-    color: '#666666',
+    color: TEXT_GRAY,
     lineHeight: 20,
   },
   termsLink: {
-    color: '#1A1A1A',
-    fontWeight: '500',
+    color: PRIMARY_GREEN,
+    fontWeight: '600',
   },
   signUpButton: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: PRIMARY_GREEN,
+    borderRadius: 20,
+    height: 56,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 8,
     marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...SHADOW_BUTTON,
   },
   signUpButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    letterSpacing: 0.5,
   },
   footer: {
     flexDirection: 'row',
@@ -493,11 +515,11 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    color: '#999999',
+    color: TEXT_GRAY,
   },
   footerLink: {
     fontSize: 14,
-    color: '#1A1A1A',
+    color: PRIMARY_GREEN,
     fontWeight: '600',
   },
 });

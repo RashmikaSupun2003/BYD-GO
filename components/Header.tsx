@@ -1,8 +1,15 @@
-import { PRIMARY_GREEN } from '@/constants/theme';
+import {
+  BACKGROUND_WHITE,
+  SHADOW_SMALL,
+  TEXT_DARK,
+  TEXT_GRAY,
+  PRIMARY_GREEN,
+  BORDER_LIGHT,
+} from '@/constants/theme';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { Image, StyleSheet, Switch, Text, View } from 'react-native';
 
 interface HeaderProps {
   title?: string;
@@ -15,7 +22,15 @@ export default function Header({ title = 'BYD GO', showThemeToggle = false }: He
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
+        {title === 'BYD GO' ? (
+          <Image
+            source={require('@/assets/images/BYDGOlogo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        ) : (
+          <Text style={styles.title}>{title}</Text>
+        )}
         {showThemeToggle && (
           <View style={styles.themeToggleContainer}>
             <Ionicons
@@ -27,9 +42,9 @@ export default function Header({ title = 'BYD GO', showThemeToggle = false }: He
             <Switch
               value={theme === 'dark'}
               onValueChange={toggleTheme}
-              trackColor={{ false: '#767577', true: PRIMARY_GREEN }}
+              trackColor={{ false: BORDER_LIGHT, true: PRIMARY_GREEN }}
               thumbColor={theme === 'dark' ? '#fff' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
+              ios_backgroundColor={BORDER_LIGHT}
             />
           </View>
         )}
@@ -40,17 +55,12 @@ export default function Header({ title = 'BYD GO', showThemeToggle = false }: He
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
-    paddingTop: 50,
+    backgroundColor: BACKGROUND_WHITE,
+    paddingTop: 60,
     paddingBottom: 16,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    borderBottomColor: BORDER_LIGHT,
   },
   content: {
     flexDirection: 'row',
@@ -58,16 +68,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
+    fontSize: 28,
+    fontWeight: '700',
+    color: TEXT_DARK,
+  },
+  logo: {
+    height: 40,
+    width: 140,
   },
   themeToggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.02)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
   themeIcon: {
-    marginRight: 4,
+    marginRight: 0,
   },
 });

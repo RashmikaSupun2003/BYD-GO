@@ -10,6 +10,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BACKGROUND_WHITE,
+  SHADOW_SMALL,
+  SHADOW_MEDIUM,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+} from '@/constants/theme';
 
 interface SearchBarProps {
   onLocationSelect: (location: Location, address: string) => void;
@@ -111,7 +120,7 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
         onPress={() => handleSelectLocation(item)}
         activeOpacity={0.7}
       >
-        <Ionicons name="location-outline" size={20} color="#2DBE7E" style={styles.rowIcon} />
+        <Ionicons name="location-outline" size={22} color={PRIMARY_GREEN} style={styles.rowIcon} />
         <View style={styles.rowContent}>
           <Text style={styles.rowTitle} numberOfLines={1}>
             {title}
@@ -129,11 +138,11 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#666666" style={styles.searchIcon} />
+        <Ionicons name="search" size={22} color={TEXT_GRAY} style={styles.searchIcon} />
         <TextInput
           style={styles.input}
           placeholder="Search any location in Sri Lanka..."
-          placeholderTextColor="#999999"
+          placeholderTextColor={TEXT_GRAY}
           value={searchQuery}
           onChangeText={setSearchQuery}
           returnKeyType="search"
@@ -144,11 +153,11 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
           }}
         />
         {loading && (
-          <ActivityIndicator size="small" color="#2DBE7E" style={styles.loader} />
+          <ActivityIndicator size="small" color={PRIMARY_GREEN} style={styles.loader} />
         )}
         {searchQuery.length > 0 && !loading && (
           <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-            <Ionicons name="close-circle" size={20} color="#666666" />
+            <Ionicons name="close-circle" size={22} color={TEXT_GRAY} />
           </TouchableOpacity>
         )}
       </View>
@@ -180,25 +189,21 @@ export default function SearchBar({ onLocationSelect }: SearchBarProps) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 10,
-    left: 16,
-    right: 16,
+    top: 16,
+    left: 24,
+    right: 24,
     zIndex: 1000,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    height: 52,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    backgroundColor: BACKGROUND_WHITE,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    height: 56,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: BORDER_LIGHT,
+    ...SHADOW_SMALL,
   },
   searchIcon: {
     marginRight: 12,
@@ -206,29 +211,26 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#1A1A1A',
+    color: TEXT_DARK,
     padding: 0,
+    fontWeight: '400',
   },
   loader: {
-    marginLeft: 10,
+    marginLeft: 12,
   },
   clearButton: {
-    marginLeft: 10,
+    marginLeft: 12,
     padding: 4,
   },
   resultsContainer: {
     marginTop: 8,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 10,
+    backgroundColor: BACKGROUND_WHITE,
+    borderRadius: 20,
     maxHeight: 300,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: BORDER_LIGHT,
+    ...SHADOW_MEDIUM,
   },
   listView: {
     maxHeight: 300,
@@ -238,7 +240,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: BORDER_LIGHT,
   },
   rowIcon: {
     marginRight: 12,
@@ -248,20 +250,20 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     fontSize: 15,
-    color: '#1A1A1A',
-    fontWeight: '500',
+    color: TEXT_DARK,
+    fontWeight: '600',
+    marginBottom: 4,
   },
   rowSubtitle: {
     fontSize: 13,
-    color: '#666666',
-    marginTop: 2,
+    color: TEXT_GRAY,
   },
   noResults: {
-    padding: 20,
+    padding: 24,
     alignItems: 'center',
   },
   noResultsText: {
     fontSize: 14,
-    color: '#666666',
+    color: TEXT_GRAY,
   },
 });

@@ -1,5 +1,4 @@
 import Header from '@/components/Header';
-import { Colors } from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -15,10 +14,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  BACKGROUND_WHITE,
+  BACKGROUND_SOFT,
+  SHADOW_SMALL,
+  SHADOW_MEDIUM,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+} from '@/constants/theme';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
-  const colors = Colors[theme];
   const { user, logout } = useAuth();
   const { favorites } = useFavorites();
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -66,13 +74,13 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <Header title="Profile" showThemeToggle={true} />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Profile Header Section */}
-        <View style={[styles.profileHeader, { backgroundColor: theme === 'dark' ? '#1a1a1a' : '#007AFF' }]}>
-          <View style={[styles.avatarContainer, { backgroundColor: theme === 'dark' ? '#333' : '#fff' }]}>
-            <Ionicons name="person" size={60} color="#007AFF" />
+        <View style={styles.profileHeader}>
+          <View style={styles.avatarContainer}>
+            <Ionicons name="person" size={56} color={PRIMARY_GREEN} />
           </View>
           <Text style={styles.profileName}>{getUserEmail().split('@')[0]}</Text>
           <Text style={styles.profileEmail}>{getUserEmail()}</Text>
@@ -81,16 +89,16 @@ export default function ProfileScreen() {
         {/* User Information Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle-outline" size={20} color={colors.tint} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Information</Text>
+            <Ionicons name="information-circle-outline" size={22} color={PRIMARY_GREEN} />
+            <Text style={styles.sectionTitle}>Information</Text>
           </View>
           
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
-              <Ionicons name="mail-outline" size={18} color={colors.icon} />
+              <Ionicons name="mail-outline" size={20} color={PRIMARY_GREEN} />
               <View style={styles.infoContent}>
-                <Text style={[styles.infoLabel, { color: colors.icon }]}>Email</Text>
-                <Text style={[styles.infoValue, { color: colors.text }]}>
+                <Text style={styles.infoLabel}>Email</Text>
+                <Text style={styles.infoValue}>
                   {getUserEmail()}
                 </Text>
               </View>
@@ -99,10 +107,10 @@ export default function ProfileScreen() {
 
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
-              <Ionicons name="heart-outline" size={18} color={colors.icon} />
+              <Ionicons name="heart-outline" size={20} color={PRIMARY_GREEN} />
               <View style={styles.infoContent}>
-                <Text style={[styles.infoLabel, { color: colors.icon }]}>Saved Stations</Text>
-                <Text style={[styles.infoValue, { color: colors.text }]}>
+                <Text style={styles.infoLabel}>Saved Stations</Text>
+                <Text style={styles.infoValue}>
                   {favorites.length} {favorites.length === 1 ? 'station' : 'stations'}
                 </Text>
               </View>
@@ -111,32 +119,34 @@ export default function ProfileScreen() {
         </View>
 
         {/* Settings Section */}
-        <View style={[styles.section, { backgroundColor: colors.background }]}>
+        <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="settings-outline" size={20} color={colors.tint} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Settings</Text>
+            <Ionicons name="settings-outline" size={22} color={PRIMARY_GREEN} />
+            <Text style={styles.sectionTitle}>Settings</Text>
           </View>
 
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => setShowAboutModal(true)}
+            activeOpacity={0.7}
           >
             <View style={styles.menuItemLeft}>
-              <Ionicons name="information-circle-outline" size={20} color={colors.text} />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>About App</Text>
+              <Ionicons name="information-circle-outline" size={20} color={TEXT_DARK} />
+              <Text style={styles.menuItemText}>About App</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.icon} />
+            <Ionicons name="chevron-forward" size={20} color={TEXT_GRAY} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.menuItem, { borderBottomWidth: 0 }]}
+            style={[styles.menuItem, styles.menuItemLast]}
             onPress={() => setShowPrivacyModal(true)}
+            activeOpacity={0.7}
           >
             <View style={styles.menuItemLeft}>
-              <Ionicons name="shield-checkmark-outline" size={20} color={colors.text} />
-              <Text style={[styles.menuItemText, { color: colors.text }]}>Privacy Policy</Text>
+              <Ionicons name="shield-checkmark-outline" size={20} color={TEXT_DARK} />
+              <Text style={styles.menuItemText}>Privacy Policy</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.icon} />
+            <Ionicons name="chevron-forward" size={20} color={TEXT_GRAY} />
           </TouchableOpacity>
         </View>
 
@@ -161,7 +171,7 @@ export default function ProfileScreen() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>About App</Text>
               <TouchableOpacity onPress={() => setShowAboutModal(false)}>
-                <Ionicons name="close" size={24} color="#666" />
+                <Ionicons name="close" size={24} color={TEXT_GRAY} />
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.modalBody}>
@@ -204,7 +214,7 @@ export default function ProfileScreen() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Privacy Policy</Text>
               <TouchableOpacity onPress={() => setShowPrivacyModal(false)}>
-                <Ionicons name="close" size={24} color="#666" />
+                <Ionicons name="close" size={24} color={TEXT_GRAY} />
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.modalBody}>
@@ -259,155 +269,170 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: BACKGROUND_SOFT,
   },
   scrollView: {
     flex: 1,
   },
   profileHeader: {
-    backgroundColor: '#007AFF',
-    paddingTop: 30,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    backgroundColor: PRIMARY_GREEN,
+    paddingTop: 40,
+    paddingBottom: 40,
+    paddingHorizontal: 24,
     alignItems: 'center',
   },
   avatarContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#fff',
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    backgroundColor: BACKGROUND_WHITE,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
+    marginBottom: 18,
+    ...SHADOW_MEDIUM,
   },
   profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 8,
     textTransform: 'capitalize',
+    letterSpacing: -0.5,
   },
   profileEmail: {
-    fontSize: 16,
-    color: '#fff',
-    opacity: 0.9,
+    fontSize: 17,
+    color: '#FFFFFF',
+    opacity: 0.95,
+    letterSpacing: -0.3,
   },
   section: {
-    marginHorizontal: 15,
-    marginTop: 15,
-    borderRadius: 12,
-    padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 20,
+    backgroundColor: BACKGROUND_WHITE,
+    borderWidth: 1,
+    borderColor: BORDER_LIGHT,
+    ...SHADOW_SMALL,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-    gap: 8,
+    marginBottom: 18,
+    gap: 10,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
+    color: TEXT_DARK,
+    letterSpacing: -0.5,
   },
   infoRow: {
-    marginBottom: 15,
+    marginBottom: 18,
   },
   infoItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 12,
+    gap: 14,
   },
   infoContent: {
     flex: 1,
   },
   infoLabel: {
     fontSize: 13,
-    marginBottom: 4,
+    marginBottom: 6,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
+    color: TEXT_GRAY,
+    fontWeight: '600',
   },
   infoValue: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '500',
+    color: TEXT_DARK,
+    letterSpacing: -0.3,
   },
   menuItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: BORDER_LIGHT,
+  },
+  menuItemLast: {
+    borderBottomWidth: 0,
   },
   menuItemLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
   },
   menuItemText: {
-    fontSize: 16,
+    fontSize: 17,
+    color: TEXT_DARK,
+    fontWeight: '500',
+    letterSpacing: -0.3,
   },
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FF3B30',
-    marginHorizontal: 15,
-    marginTop: 20,
-    paddingVertical: 15,
-    borderRadius: 12,
-    gap: 8,
+    marginHorizontal: 20,
+    marginTop: 24,
+    paddingVertical: 18,
+    borderRadius: 16,
+    gap: 10,
+    ...SHADOW_MEDIUM,
   },
   logoutButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 17,
     fontWeight: '600',
+    letterSpacing: -0.3,
   },
   bottomSpacer: {
-    height: 30,
+    height: 40,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: BACKGROUND_WHITE,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     maxHeight: '80%',
     paddingBottom: 20,
+    ...SHADOW_MEDIUM,
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: BORDER_LIGHT,
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    fontSize: 24,
+    fontWeight: '700',
+    color: TEXT_DARK,
+    letterSpacing: -0.5,
   },
   modalBody: {
-    padding: 20,
+    padding: 24,
   },
   modalText: {
-    fontSize: 15,
-    lineHeight: 24,
-    color: '#333',
+    fontSize: 16,
+    lineHeight: 26,
+    color: TEXT_GRAY,
+    letterSpacing: -0.2,
   },
   modalBold: {
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontWeight: '700',
+    color: TEXT_DARK,
   },
 });

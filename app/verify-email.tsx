@@ -13,6 +13,16 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  SHADOW_SMALL,
+  SHADOW_BUTTON,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+} from '@/constants/theme';
 
 export default function VerifyEmailScreen() {
   const { signUp, setActive, isLoaded } = useSignUp();
@@ -129,7 +139,7 @@ export default function VerifyEmailScreen() {
             onPress={() => router.back()}
             activeOpacity={0.7}
           >
-            <Ionicons name="arrow-back" size={24} color="#1A1A1A" />
+            <Ionicons name="arrow-back" size={24} color={TEXT_DARK} />
           </TouchableOpacity>
         </View>
 
@@ -192,16 +202,16 @@ export default function VerifyEmailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: BACKGROUND_SOFT,
   },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 70,
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 40,
+    marginBottom: 32,
   },
   backButton: {
     width: 40,
@@ -211,18 +221,21 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     marginBottom: 40,
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
+    fontWeight: '700',
+    color: TEXT_DARK,
     marginBottom: 12,
-    letterSpacing: -0.5,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#999999',
-    lineHeight: 22,
+    color: TEXT_GRAY,
+    lineHeight: 24,
+    textAlign: 'center',
+    paddingHorizontal: 8,
   },
   codeSection: {
     marginBottom: 32,
@@ -235,18 +248,18 @@ const styles = StyleSheet.create({
   codeInput: {
     flex: 1,
     height: 64,
-    backgroundColor: '#F5F5F5',
-    borderRadius: 12,
+    backgroundColor: BACKGROUND_WHITE,
+    borderRadius: 16,
     fontSize: 24,
     fontWeight: '600',
     textAlign: 'center',
-    color: '#1A1A1A',
-    borderWidth: 2,
-    borderColor: 'transparent',
+    color: TEXT_DARK,
+    borderWidth: 1,
+    borderColor: BORDER_LIGHT,
   },
   codeInputFilled: {
-    backgroundColor: '#F0F0F0',
-    borderColor: '#1A1A1A',
+    borderColor: PRIMARY_GREEN,
+    borderWidth: 2,
   },
   resendSection: {
     flexDirection: 'row',
@@ -256,32 +269,28 @@ const styles = StyleSheet.create({
   },
   resendText: {
     fontSize: 14,
-    color: '#999999',
+    color: TEXT_GRAY,
   },
   resendLink: {
     fontSize: 14,
-    color: '#1A1A1A',
+    color: PRIMARY_GREEN,
     fontWeight: '600',
   },
   verifyButton: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: PRIMARY_GREEN,
+    borderRadius: 20,
+    height: 56,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    justifyContent: 'center',
+    ...SHADOW_BUTTON,
   },
   verifyButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    letterSpacing: 0.5,
   },
   buttonDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
 });
 

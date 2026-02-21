@@ -10,6 +10,16 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import {
+  BACKGROUND_WHITE,
+  BACKGROUND_SOFT,
+  SHADOW_SMALL,
+  SHADOW_MEDIUM,
+  TEXT_DARK,
+  TEXT_GRAY,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+} from '@/constants/theme';
 
 interface HorizontalStationListProps {
   stations: EVStation[];
@@ -45,7 +55,7 @@ export default function HorizontalStationList({
               }}
               activeOpacity={0.8}
             >
-              <Ionicons name="navigate" size={20} color="#fff" />
+              <Ionicons name="navigate" size={18} color="#fff" />
             </TouchableOpacity>
           </View>
         )}
@@ -83,23 +93,23 @@ export default function HorizontalStationList({
 
           <View style={styles.cardDetails}>
             <View style={styles.chargerInfo}>
-              <Ionicons name="car-outline" size={14} color="#2DBE7E" />
+              <Ionicons name="car-outline" size={16} color={PRIMARY_GREEN} />
               <Text style={styles.chargerText}>
                 Fast Charger (CCS2 & CHAdeMO)
               </Text>
             </View>
             <View style={styles.connectorInfo}>
-              <Ionicons name="flash-outline" size={14} color="#2DBE7E" />
+              <Ionicons name="flash-outline" size={16} color={PRIMARY_GREEN} />
               <Text style={styles.connectorText}>
                 {station.connectorCount || 0} connectors
               </Text>
             </View>
           </View>
 
-          <View
+            <View
             style={[
               styles.availability,
-              { backgroundColor: station.available ? '#2DBE7E' : '#F44336' },
+              { backgroundColor: station.available ? PRIMARY_GREEN : '#FF3B30' },
             ]}
           >
             <Text style={styles.availabilityText}>
@@ -131,34 +141,28 @@ export default function HorizontalStationList({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
-    backgroundColor: 'rgba(245, 245, 245, 0.95)',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+    paddingVertical: 16,
+    backgroundColor: BACKGROUND_WHITE,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: 1,
+    borderTopColor: BORDER_LIGHT,
   },
   scrollView: {
     flexGrow: 0,
   },
   scrollContent: {
-    paddingHorizontal: 15,
-    paddingRight: 15,
+    paddingHorizontal: 24,
   },
   card: {
-    width: 320,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginRight: 15,
+    width: 300,
+    backgroundColor: BACKGROUND_WHITE,
+    borderRadius: 20,
+    marginRight: 16,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: BORDER_LIGHT,
+    ...SHADOW_SMALL,
   },
   imageContainer: {
     position: 'relative',
@@ -166,27 +170,23 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: '100%',
-    height: 150,
-    backgroundColor: '#e0e0e0',
+    height: 120,
+    backgroundColor: BACKGROUND_SOFT,
   },
   locationButton: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: '#2DBE7E',
+    bottom: 12,
+    right: 12,
+    backgroundColor: PRIMARY_GREEN,
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+    ...SHADOW_SMALL,
   },
   cardContent: {
-    padding: 12,
+    padding: 16,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -196,23 +196,24 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     flex: 1,
-    marginRight: 8,
+    marginRight: 12,
   },
   cardName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-    marginBottom: 4,
+    fontSize: 18,
+    fontWeight: '700',
+    color: TEXT_DARK,
+    marginBottom: 6,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 4,
+    gap: 6,
   },
   cardAddress: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 13,
+    color: TEXT_GRAY,
     flex: 1,
+    lineHeight: 18,
   },
   favoriteButton: {
     padding: 4,
@@ -227,8 +228,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   chargerText: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 13,
+    color: TEXT_GRAY,
   },
   connectorInfo: {
     flexDirection: 'row',
@@ -236,13 +237,13 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   connectorText: {
-    fontSize: 12,
-    color: '#666',
-    fontWeight: '500',
+    fontSize: 13,
+    color: TEXT_GRAY,
+    fontWeight: '600',
   },
   availability: {
     alignSelf: 'flex-start',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
   },

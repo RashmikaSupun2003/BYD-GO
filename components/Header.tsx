@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     color: TEXT_DARK,
   },
   logo: {
-    height: 40,
-    width: 140,
+    height: 60,
+    width: 200,
   },
   themeToggleContainer: {
     flexDirection: 'row',

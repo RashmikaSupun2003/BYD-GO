@@ -1,3 +1,13 @@
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+  SHADOW_BUTTON,
+  SHADOW_SMALL,
+  TEXT_DARK,
+  TEXT_GRAY,
+} from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSignUp } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +17,7 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -17,17 +28,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  BACKGROUND_SOFT,
-  BACKGROUND_WHITE,
-  SHADOW_SMALL,
-  SHADOW_BUTTON,
-  TEXT_DARK,
-  TEXT_GRAY,
-  BORDER_LIGHT,
-  PRIMARY_GREEN,
-} from '@/constants/theme';
-import { Image } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -368,8 +368,8 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   logo: {
-    width: 220,
-    height: 72,
+    width: 620,
+    height: 105,
   },
   backButton: {
     width: 40,

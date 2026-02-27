@@ -1,4 +1,14 @@
 import Header from '@/components/Header';
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+  SHADOW_MEDIUM,
+  SHADOW_SMALL,
+  TEXT_DARK,
+  TEXT_GRAY,
+} from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -14,16 +24,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  BACKGROUND_WHITE,
-  BACKGROUND_SOFT,
-  SHADOW_SMALL,
-  SHADOW_MEDIUM,
-  TEXT_DARK,
-  TEXT_GRAY,
-  BORDER_LIGHT,
-  PRIMARY_GREEN,
-} from '@/constants/theme';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();

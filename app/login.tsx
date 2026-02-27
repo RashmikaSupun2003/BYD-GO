@@ -1,3 +1,13 @@
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+  SHADOW_BUTTON,
+  SHADOW_SMALL,
+  TEXT_DARK,
+  TEXT_GRAY
+} from '@/constants/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSignIn } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,27 +17,15 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {
-  BACKGROUND_SOFT,
-  BACKGROUND_WHITE,
-  SHADOW_SMALL,
-  SHADOW_MEDIUM,
-  SHADOW_BUTTON,
-  TEXT_DARK,
-  TEXT_GRAY,
-  BORDER_LIGHT,
-  PRIMARY_GREEN,
-} from '@/constants/theme';
-import { Image } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -255,23 +253,7 @@ export default function LoginScreen() {
             {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
           </View>
 
-          {/* Remember Me & Forgot Password */}
-          <View style={styles.optionsRow}>
-            <View style={styles.rememberMeContainer}>
-              <Switch
-                value={rememberMe}
-                onValueChange={setRememberMe}
-                trackColor={{ false: BORDER_LIGHT, true: PRIMARY_GREEN }}
-                thumbColor="#FFFFFF"
-                ios_backgroundColor={BORDER_LIGHT}
-              />
-              <Text style={styles.rememberMeText}>Remember me</Text>
-            </View>
-            <TouchableOpacity>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-
+         
           {/* Sign In Button */}
           <TouchableOpacity
             style={[styles.signInButton, loading && styles.buttonDisabled]}
@@ -324,8 +306,8 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   logo: {
-    width: 220,
-    height: 72,
+    width: 360,
+    height: 118,
   },
   titleSection: {
     marginBottom: 32,

@@ -161,8 +161,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   logo: {
-    width: 220,
-    height: 72,
+    width: 320,
+    height: 105,
   },
   skipButton: {
     position: 'absolute',

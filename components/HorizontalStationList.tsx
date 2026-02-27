@@ -1,25 +1,24 @@
+import {
+  BACKGROUND_SOFT,
+  BACKGROUND_WHITE,
+  BORDER_LIGHT,
+  PRIMARY_GREEN,
+  SHADOW_SMALL,
+  TEXT_DARK,
+  TEXT_GRAY
+} from '@/constants/theme';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { EVStation } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {
-  BACKGROUND_WHITE,
-  BACKGROUND_SOFT,
-  SHADOW_SMALL,
-  SHADOW_MEDIUM,
-  TEXT_DARK,
-  TEXT_GRAY,
-  BORDER_LIGHT,
-  PRIMARY_GREEN,
-} from '@/constants/theme';
 
 interface HorizontalStationListProps {
   stations: EVStation[];

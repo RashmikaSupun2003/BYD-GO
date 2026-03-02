@@ -75,7 +75,9 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Profile" showThemeToggle={true} />
+      <View style={styles.headerWrapper}>
+        <Header title="Profile" showThemeToggle={true} />
+      </View>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Profile Header Section */}
         <View style={styles.profileHeader}>
@@ -270,6 +272,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BACKGROUND_SOFT,
+  },
+  headerWrapper: {
+    paddingTop: 50,
+    paddingBottom: 8,
   },
   scrollView: {
     flex: 1,

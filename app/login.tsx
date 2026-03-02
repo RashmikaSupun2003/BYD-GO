@@ -20,6 +20,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -132,7 +133,12 @@ export default function LoginScreen() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.content}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
@@ -276,7 +282,8 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -286,28 +293,37 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BACKGROUND_SOFT,
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
   content: {
-    flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 70,
+    paddingTop: 0,
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 32,
+    marginTop: 30,
+    marginBottom: 8,
+    zIndex: 10,
+    position: 'relative',
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'flex-start',
+    padding: 8,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 8,
+    marginTop: -70,
+    zIndex: 1,
   },
   logo: {
-    width: 360,
-    height: 118,
+    width: 680,
+    height: 258,
   },
   titleSection: {
     marginBottom: 32,
@@ -374,7 +390,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   form: {
-    flex: 1,
+    width: '100%',
   },
   inputContainer: {
     marginBottom: 16,

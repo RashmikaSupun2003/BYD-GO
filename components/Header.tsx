@@ -1,10 +1,8 @@
 import {
   BACKGROUND_WHITE,
-  SHADOW_SMALL,
-  TEXT_DARK,
-  TEXT_GRAY,
-  PRIMARY_GREEN,
   BORDER_LIGHT,
+  PRIMARY_GREEN,
+  TEXT_DARK
 } from '@/constants/theme';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,7 +22,7 @@ export default function Header({ title = 'BYD GO', showThemeToggle = false }: He
       <View style={styles.content}>
         {title === 'BYD GO' ? (
           <Image
-            source={require('@/assets/images/BYDGOlogo.png')}
+            source={require('@/assets/images/hlogo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -56,11 +54,9 @@ export default function Header({ title = 'BYD GO', showThemeToggle = false }: He
 const styles = StyleSheet.create({
   container: {
     backgroundColor: BACKGROUND_WHITE,
-    paddingTop: 60,
-    paddingBottom: 16,
+    paddingTop: 16,
+    paddingBottom: 12,
     paddingHorizontal: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: BORDER_LIGHT,
   },
   content: {
     flexDirection: 'row',
@@ -73,17 +69,17 @@ const styles = StyleSheet.create({
     color: TEXT_DARK,
   },
   logo: {
-    height: 60,
-    width: 200,
+    height: 100,
+    width: 100,
   },
   themeToggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 3,
     backgroundColor: 'rgba(0, 0, 0, 0.02)',
-    paddingHorizontal: 12,
+    paddingHorizontal: 2,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   themeIcon: {
     marginRight: 0,

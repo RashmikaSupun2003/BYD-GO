@@ -2,11 +2,10 @@ import Header from '@/components/Header';
 import StationList from '@/components/StationList';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { EVStation, Location as LocationType } from '@/types';
-import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
-import { Linking, Platform } from 'react-native';
+import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Platform, StyleSheet, Text, View } from 'react-native';
 
 export default function FavoritesScreen() {
   const { favorites, loading } = useFavorites();
@@ -74,7 +73,9 @@ export default function FavoritesScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Header title="Favorites" />
+        <View style={styles.headerWrapper}>
+          <Header title="Favorites" />
+        </View>
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Loading...</Text>
         </View>
@@ -85,7 +86,9 @@ export default function FavoritesScreen() {
   if (favorites.length === 0) {
     return (
       <View style={styles.container}>
-        <Header title="Favorites" />
+        <View style={styles.headerWrapper}>
+          <Header title="Favorites" />
+        </View>
         <View style={styles.emptyContainer}>
           <Ionicons name="heart-outline" size={80} color="#ccc" />
           <Text style={styles.emptyText}>No favorites yet</Text>
@@ -99,7 +102,9 @@ export default function FavoritesScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Favorites" />
+      <View style={styles.headerWrapper}>
+        <Header title="Favorites" />
+      </View>
       <StationList 
         stations={favorites} 
         onStationPress={handleStationPress}
@@ -113,6 +118,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  headerWrapper: {
+    paddingTop: 50,
+    paddingBottom: 8,
   },
   emptyContainer: {
     flex: 1,

@@ -1,13 +1,10 @@
 import {
+  BACKGROUND_SOFT,
+  BORDER_LIGHT,
   PRIMARY_GREEN,
-  SHADOW_SMALL,
-  SHADOW_MEDIUM,
   SHADOW_BUTTON,
   TEXT_DARK,
-  TEXT_GRAY,
-  BACKGROUND_SOFT,
-  BACKGROUND_WHITE,
-  BORDER_LIGHT,
+  TEXT_GRAY
 } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
-    top: 70,
+    top: 40,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -161,8 +158,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   logo: {
-    width: 320,
-    height: 105,
+    width: 480,
+    height: 158,
   },
   skipButton: {
     position: 'absolute',

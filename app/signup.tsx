@@ -357,25 +357,31 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 70,
+    paddingTop: 0,
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 32,
+    marginTop: 30,
+    marginBottom: 8,
+    zIndex: 10,
+    position: 'relative',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 8,
+    marginTop: -70,
+    zIndex: 1,
   },
   logo: {
-    width: 620,
-    height: 105,
+    width: 680,
+    height: 258,
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'flex-start',
+    padding: 8,
   },
   titleSection: {
     marginBottom: 32,
